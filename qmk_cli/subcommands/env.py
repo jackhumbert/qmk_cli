@@ -13,7 +13,8 @@ def env(cli):
     home = os.environ.get('QMK_HOME', "")
     data = {
         'QMK_HOME': home,
-        'QMK_FIRMWARE': home if is_qmk_firmware(Path(home)) else ""
+        'QMK_FIRMWARE': home if is_qmk_firmware(Path(home)) else "",
+        'QMK_JSON': os.environ.get('QMK_JSON', "")
     }
 
     # Now munge the current cli config

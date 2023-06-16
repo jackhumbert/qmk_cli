@@ -7,6 +7,7 @@ from pathlib import Path
 
 from milc import cli
 
+from qmk_cli import modules
 
 def is_qmk_firmware(qmk_firmware):
     """Returns True if the given Path() is a qmk_firmware clone.
@@ -25,7 +26,6 @@ def is_qmk_firmware(qmk_firmware):
 
     return True
 
-
 @lru_cache(maxsize=2)
 def find_qmk_firmware():
     """Look for qmk_firmware in the usual places.
@@ -34,6 +34,9 @@ def find_qmk_firmware():
     """
     if in_qmk_firmware():
         return in_qmk_firmware()
+    
+    if modules.has_qmk_json():
+        return modules.get_qmk_location()
 
     if cli.config.user.qmk_home:
         return Path(cli.config.user.qmk_home).expanduser().resolve()
