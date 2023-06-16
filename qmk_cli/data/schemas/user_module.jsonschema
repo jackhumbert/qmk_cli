@@ -7,23 +7,49 @@
     "properties": {
         "type": {
             "type": "string",
-            "enum": ["user"]
+            "enum": [
+                "user"
+            ]
         },
         "dependencies": {
-            "description": "Additional modules that are needed by this one",
+            "description": "Named modules that will be imported",
             "type": "object",
             "patternProperties": {
                 "^[a-z0-9_]+$": {
                     "anyOf": [
                         {
                             "description": "Explicit version",
-                            "type": "string",
-                            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+                            "$ref": "qmk.definitions.v1#/version"
                         },
                         {
                             "description": "Locally managed",
-                            "type": "string",
-                            "pattern": "^.+$"
+                            "$ref": "qmk.definitions.v1#/relative_path"
+                        },
+                        {
+                            "description": "Explicit module import definition",
+                            "type": "object",
+                            "properties": {
+                                "version": {
+                                    "anyOf": [
+                                        {
+                                            "description": "Explicit version",
+                                            "$ref": "qmk.definitions.v1#/version"
+                                        },
+                                        {
+                                            "description": "Locally managed",
+                                            "$ref": "qmk.definitions.v1#/relative_path"
+                                        }
+                                    ]
+                                },
+                                "devices": {
+                                    "description": "List of paths/devices to import",
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "qmk.definitions.v1#/relative_path"
+                                    }
+                                }
+                            },
+                            "required": ["version"]
                         }
                     ]
                 }
@@ -35,11 +61,17 @@
             "type": "object",
             "patternProperties": {
                 "^[a-z0-9_]+$": {
-                    "anyOf": [
+                    "oneOf": [
                         {
                             "description": "Relative path of keymap(s)",
-                            "type": "string",
-                            "pattern": "^.+$"
+                            "$ref": "qmk.definitions.v1#/relative_path"
+                        },
+                        {
+                            "description": "List of keymap paths",
+                            "type": "array",
+                            "items": {
+                                "$ref": "qmk.definitions.v1#/relative_path"
+                            }
                         }
                     ]
                 }

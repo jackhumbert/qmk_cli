@@ -60,6 +60,7 @@ def validate(json, schema):
 
 schema_store = {}
 root_path = Path(__file__).parent
+schema_store['qmk.definitions.v1'] = load_jsonschema(root_path / "data/schemas/definitions.jsonschema")
 schema_store['qmk.module.v1'] = load_jsonschema(root_path / "data/schemas/module.jsonschema")
 schema_store['qmk.user_module.v1'] = load_jsonschema(root_path / "data/schemas/user_module.jsonschema")
 schema_store['qmk.device_module.v1'] = load_jsonschema(root_path / "data/schemas/device_module.jsonschema")

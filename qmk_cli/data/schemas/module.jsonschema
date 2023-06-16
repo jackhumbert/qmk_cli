@@ -16,13 +16,11 @@
             "anyOf": [
                 {
                     "description": "Explicit version",
-                    "type": "string",
-                    "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+                    "$ref": "qmk.definitions.v1#/version"
                 },
                 {
                     "description": "Locally managed",
-                    "type": "string",
-                    "pattern": "^.+$"
+                    "$ref": "qmk.definitions.v1#/relative_path"
                 }
             ]
         }

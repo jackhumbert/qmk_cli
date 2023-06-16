@@ -14,8 +14,7 @@
             "pattern": "^[a-z0-9_]+$"
         },
         "module_version": {
-            "type": "string",
-            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+            "$ref": "qmk.definitions.v1#/version"
         }
     }
 }
