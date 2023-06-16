@@ -24,4 +24,6 @@ class RegistryEntry:
                     # TODO be smarter about tags & current versions, checking the qmk.json in the latest, etc
                     cli.run(['git', 'fetch', '--all', '--tags'], cwd=self.path)
                     cli.run(['git', 'checkout', 'v' + version], cwd=self.path)
+        if not self.path.joinpath("qmk.json").exists():
+            print(f"Could not resolve {self.name}@{version}")
         return self.path
