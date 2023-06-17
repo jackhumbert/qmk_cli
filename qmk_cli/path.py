@@ -1,4 +1,5 @@
 import platform
+from pathlib import Path
 
 def get_os_path(path):  
     """Get msys cli-compatible path
@@ -10,3 +11,6 @@ def get_os_path(path):
         return cli.run(['cygpath', '-u', str(path)]).stdout.strip()
     else:
         return str(path)
+    
+def get_qmk_path():
+    return get_os_path(Path(__file__).parent.parent / 'qmk')
