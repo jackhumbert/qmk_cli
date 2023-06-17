@@ -7,6 +7,7 @@ from zipfile import ZipFile
 import jsonschema
 
 from pathlib import Path
+from qmk_cli.path import get_os_path
 from qmk_cli.json import json_load, validate
 from milc import cli
 
@@ -35,12 +36,12 @@ def has_qmk_json():
 def get_paths():
     paths = []
     for module in modules.values():
-        paths.append(cli.run(['cygpath', '-u', str(module.path)]).stdout.strip())
+        paths.append(get_os_path(module.path))
     return ";".join(paths)
 
 def get_user_module():
     if isinstance(root_module, UserModule):
-        return cli.run(['cygpath', '-u', str(root_module.path)]).stdout.strip()
+        return get_os_path(root_module.path)
     else:
         return None
 
