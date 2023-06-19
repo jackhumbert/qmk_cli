@@ -44,7 +44,13 @@ def get_user_module():
         return get_os_path(root_module.path)
     else:
         return None
-
+    
+def get_targets():
+    if isinstance(root_module, UserModule):
+        return keymaps.get_all_keymaps()
+    else:
+        return devices.get_all()
+    
 def get_qmk_location():
     qmk_location = None
     qmk_version = None
@@ -150,7 +156,11 @@ class DeviceModule(Module):
             device_wildcard = os.path.join(self.path, "**", "rules.mk")
             paths = [path for path in glob(device_wildcard, recursive=True) if os.path.sep + 'keymaps' + os.path.sep not in path]
             for path in sorted(set(paths)):
+                if self.qmk_location and path.startswith(str(Path(self.qmk_location).resolve())):
+                    continue
                 folder = path.replace(str(self.path) + os.path.sep, "").replace(os.path.sep + "rules.mk", "")
+                if folder == "rules.mk":
+                    continue
                 device = devices.ModuleDevice(name + "/" + folder, folder, self)
                 self.devices.append(device)
                 devices.add(device)
@@ -169,10 +179,10 @@ class UserModule(Module):
     def __init__(self, json, path):
         super().__init__(json, path)
         validate(json, 'qmk.user_module.v1')
-        if 'dependencies' in json:
+        if 'dependencies' in self.json:
             # print("loading dependencies")
             self.dependencies = []
-            for name, version in json['dependencies'].items():
+            for name, version in self.json['dependencies'].items():
                 if isinstance(version, str):
                     module = Module.from_dependency(name, version, True)
                 elif isinstance(version, object):
@@ -186,8 +196,8 @@ class UserModule(Module):
                     # print(f"Cannot find dependency '{name}': '{version}' (looked at '{str(dep_json_path)}')")
                     
 
-        if 'keymaps' in json:
-            for device, value in json['keymaps'].items():
+        if 'keymaps' in self.json:
+            for device, value in self.json['keymaps'].items():
                 keymap_list = value if isinstance(value, list) else [value]
                 for keymap in keymap_list:
                     keymap_wildcard = os.path.join(self.path, keymap, "**", "keymap.c")

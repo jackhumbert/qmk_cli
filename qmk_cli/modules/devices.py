@@ -14,3 +14,9 @@ def add(device):
 
 def get(device_name):
     return devices[device_name]
+
+def get_all():
+    names = []
+    for name, device in devices.items():
+        names.append((name, 'default'))
+    return names

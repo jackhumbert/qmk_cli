@@ -13,3 +13,10 @@ def get_keymaps(device_name: str):
 
 def get_keymap_path(device_name: str, keymap_name: str):
     return keymaps[device_name][keymap_name]
+
+def get_all_keymaps():
+    targets = []
+    for device, keymap_list in keymaps.items():
+        for keymap in keymap_list:
+            targets.append((device, keymap))
+    return targets
